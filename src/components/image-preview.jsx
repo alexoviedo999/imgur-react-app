@@ -1,4 +1,6 @@
 React = require('react');
+var ReactRouter = require('react-router');
+var Link = ReactRouter.Link;
 
 
 module.exports = React.createClass({
@@ -8,12 +10,16 @@ module.exports = React.createClass({
 		}
 	},
 	render: function () {
-		return <div className="image-preview"
-		onMouseEnter={this.handleMouseEnter}
-		onMouseLeave={this.handleMouseLeave}
-		>
+		return <Link
+			to={"images/" + this.props.id}
+			className="image-preview"
+			onMouseEnter={this.handleMouseEnter}
+			onMouseLeave={this.handleMouseLeave}
+			>
 			{this.props.animated && this.state.hovering ? this.video() : this.image()}
-		</div>
+			{this.props.animated && !this.state.hovering ? this.icon() : null}
+			{this.state.hovering ? this.inset() : null}
+		</Link>
 	},
 	image: function () {
 		var link = 'http://i.imgur.com/' + this.props.id + 'h.jpg';
@@ -22,9 +28,19 @@ module.exports = React.createClass({
 	},
 	video: function () {
 		return <div>
-			<video preload='auto' autoPlay='autoPlay' loop='loop' webkit-playsinline>
-			<source src={this.props.mp4} type='video/mp4'></source>
+			<video preload="auto" autoPlay="autoPlay" loop="loop" webkit-playsinline>
+			<source src={this.props.mp4} type="video/mp4"></source>
 			</video>
+		</div>
+	},
+	icon: function () {
+		return <span className="glyphicon glyphicon-play"></span>
+	},
+	inset: function () {
+		return <div className="inset">
+			Views: {this.props.views}
+			<br />
+			Upvotes: {this.props.ups}
 		</div>
 	},
 	handleMouseEnter: function () {
